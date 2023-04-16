@@ -149,3 +149,11 @@ int main(){
 | 13 | 8192  |	8.179 |	0.006 |	 1363 |	    3.84      |       2.00    |
 | 14 | 16384 |	29.14 |	0.012 |	 2428 |	    3.56      |       2.00    |
 | 15 | 32768 |	120.2 |	0.031 |	 3878 |	    4.13      |       2.58    |
+
+**pp**: število potenc dveh, ki se uporabijo za določanje dolžine signala pri DFT in FFT
+**N**: dolžina signala, ki se analizira
+**DFT**: časovna zahtevnost DFT algoritma v sekundah
+**FFT**: časovna zahtevnost FFT algoritma v sekundah
+**Ratio**: Razmerje med časovno zahtevnostjo DFT proti časovna zahtevnost FFT
+**rel_delta_DFT**: relativna sprememba v časovni zahtevnosti med dvema zaporednima pp vrednostima.
+**rel_delta_FFT**: relativna sprememba v časovni zahtevnosti med dvema zaporednima pp vrednostima.
