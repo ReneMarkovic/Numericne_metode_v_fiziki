@@ -1,5 +1,35 @@
 #pragma once
 
+double **read_file(char *filename) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("Napaka: Ne morem odpreti datoteke %s\n", filename);
+        return NULL;
+    }
+
+    // Allocate memory for the 2D array
+    double **data = (double **)malloc(65536 * sizeof(double *));
+    for (int i = 0; i < 65536; i++) {
+        data[i] = (double *)malloc(2 * sizeof(double));
+    }
+
+    // Read the file and populate the 2D array
+    int row = 0;
+    while (!feof(file)) {
+        double x, y;
+        if (fscanf(file, "%lf\t%lf", &x, &y) != 2) {
+            break;
+        }
+        data[row][0] = x;
+        data[row][1] = y;
+        row++;
+    }
+
+    fclose(file);
+    return data;
+}
+
+
 int get_info(bool show){
 	if (show) {
 		printf("####################################\n");
@@ -142,8 +172,8 @@ Drugi del vaj
 
 Complex complex_ustvari(double r, double i) {
 	/*
-	r- realni del kompleksnega števila
-	i- imaginarni del kompleksnega števila
+	r- realni del kompleksnega ï¿½tevila
+	i- imaginarni del kompleksnega ï¿½tevila
 	*/
 	Complex c;
 	c.real = r;
@@ -151,7 +181,7 @@ Complex complex_ustvari(double r, double i) {
 	return c;
 }
 
-Complex complex_množenje(Complex a, Complex b) {
+Complex complex_mnoï¿½enje(Complex a, Complex b) {
 	Complex c;
 	c.real = a.real * b.real - a.imag * b.imag;
 	c.imag = a.real * b.imag + a.imag * b.real;
@@ -184,7 +214,7 @@ void FFT(double* casovna_vrsta, Complex* izhod, int n) {
 		}
 	}
 
-	// Izraèun kompleksnega FFT
+	// Izraï¿½un kompleksnega FFT
 	//printf("Kompleksni array a\n");
 	for (i = 0; i < n; i++) {
 		izhod[i].real = casovna_vrsta[i];
@@ -204,7 +234,7 @@ void FFT(double* casovna_vrsta, Complex* izhod, int n) {
 			s = sin(-2.0 * PI * j / n2);
 			for (k = j; k < n; k = k + n2) {
 				k1 = k + n1;
-				t = complex_množenje(izhod[k1], complex_ustvari(c, s));
+				t = complex_mnoï¿½enje(izhod[k1], complex_ustvari(c, s));
 				u = izhod[k];
 				izhod[k] = complex_add(u, t);
 				izhod[k1] = complex_sub(u, t);
