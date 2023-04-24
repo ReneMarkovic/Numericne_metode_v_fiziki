@@ -97,7 +97,7 @@ vector<double> Gauss_eliminacija(vector<vector<double>> A) {
 	return x;
 }
 
-void izpis_rešitev(vector <double> R) {
+void izpis_resitev(vector <double> R) {
 	int n = R.size();
 	int i;
 	for (i = 0; i < n; i++) {

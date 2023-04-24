@@ -24,7 +24,7 @@ int main() {
 
 	izpisi_matriko_na_terminal(A);
 	R=Gauss_eliminacija(A);
-	izpis_rešitev(R);
+	izpis_resitev(R);
 	getchar();
 	return 0;
 }

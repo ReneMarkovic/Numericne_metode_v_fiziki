@@ -19,7 +19,7 @@ void izpisi_matriko_na_terminal(vector<vector<double>> A);
 vector<double> Gauss_eliminacija(vector<vector<double>> A);
 
 //Izpiši rešitev
-void izpis_rešitev(vector <double> R);
+void izpis_resitev(vector <double> R);
 
 void shrani_matriko_v_datoteko(const vector<vector<double>>& A);
 
