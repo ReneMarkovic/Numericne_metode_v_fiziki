@@ -24,18 +24,80 @@ Ta projekt vsebuje implementacijo Gaussove eliminacije v programskem jeziku C++.
 
 ### Uporaba
 
-Projekt je zgrajen z uporabo orodja `CMake`. Za zgraditev projekta sledite naslednjim korakom:
+Kako uporabiti program za Linux, OS X in Windows:
 
-1. Odprite terminal in se premaknite v koreninsko mapo projekta.
-2. Vnesite naslednje ukaze v terminal:
+#### Linux
 
-```
-mkdir build
-cd build
-cmake ..
-make
+Za uporabo programa na Linuxu moramo najprej prenesti datoteke projekta iz Github repozitorija. Lahko uporabimo ukaz `git clone`:
+
+```sh
+git clone https://github.com/your-username/your-repository.git
 ```
 
-3. Ko se projekt uspešno zgradi, lahko izvedete `./gauss_elimination` in uporabite program.
+Nato se premaknemo v mapo s projektom:
 
-Uporaba programa je enost
+```sh
+cd your-repository
+```
+
+Za zagon programa lahko uporabimo ukaz:
+
+```sh
+./gauss
+```
+
+#### OS X
+
+Za uporabo programa na OS X moramo najprej prenesti datoteke projekta iz Github repozitorija. Lahko uporabimo ukaz `git clone`:
+
+```sh
+git clone https://github.com/your-username/your-repository.git
+```
+
+Nato se premaknemo v mapo s projektom:
+
+```sh
+cd your-repository
+```
+
+Za zagon programa lahko uporabimo ukaz:
+
+```sh
+./gauss
+```
+
+Če imamo težave s zagonom programa, lahko poskusimo odpreti terminal in se premaknemo v mapo s projektom, nato pa uporabimo ukaz:
+
+```sh
+chmod +x gauss
+```
+
+Ta ukaz bo omogočil izvajanje programa.
+
+#### Windows
+
+Za uporabo programa na Windowsu moramo najprej prenesti datoteke projekta iz Github repozitorija. Lahko uporabimo ukaz `git clone`:
+
+```sh
+git clone https://github.com/your-username/your-repository.git
+```
+
+Nato se premaknemo v mapo s projektom:
+
+```sh
+cd your-repository
+```
+
+Za zagon programa lahko odpremo CMD in se premaknemo v mapo s projektom, nato pa uporabimo ukaz:
+
+```sh
+gauss.exe
+```
+
+Ali pa dvokliknemo na datoteko `gauss.exe`, ki se nahaja v mapi s projektom.
+
+Če imamo težave s zagonom programa, lahko poskusimo z desnim klikom na datoteko `gauss.exe` in izberemo možnost "Properties". V oknu Properties izberemo zavihek "Compatibility" in nato označimo polje "Run this program as an administrator" ter shranimo spremembe.
+
+## Povzetek
+
+Uporaba programa na različnih operacijskih sistemih se nekoliko razlikuje, vendar je na splošno precej enostavna. Z uporabo git repozitorija lahko prenesemo datoteke projekta, nato pa lahko uporabimo ustrezne ukaze za zagon programa.
