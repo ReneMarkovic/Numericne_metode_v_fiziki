@@ -1,10 +1,12 @@
+#include <math.h>
+
 double f(double x) {
 	return sin(x);
 }
 double dfdx(double x) {
 	return cos(x);
 }
-//Numeriène metode za doloèevanje odvoda
+//NumeriÄne metode za doloï¿½evanje odvoda
 double df_en1(double x, double h) {
 	return (f(x + h) - f(x)) / h;
 }
