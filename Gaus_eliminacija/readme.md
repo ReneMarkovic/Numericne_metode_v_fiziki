@@ -8,9 +8,9 @@ $$A x = b$$
 
 V datoteku je tako zadnji stolpec rezerviran za vrednosti vektorja **b**. Če bi tako hoteli rešiti enačbo:
 
-$$ 𝑥_1+2*x_2+3*𝑥_3=17 $$
-$$ 2*𝑥_1 +5*𝑥_2+8*𝑥_3=44 $$
-$$ 3*𝑥_1+8*𝑥_2+14*𝑥_3=76 $$
+$$ 𝑥_1 + 2 x_2 + 3 𝑥_3 = 17 $$
+$$ 2 𝑥_1 + 5 𝑥_2 + 8 𝑥_3 = 44 $$
+$$ 3 𝑥_1+8 𝑥_2 + 14 𝑥_3=76 $$
 
 Bi matrika **A** imela obliko:
 $$
