@@ -181,7 +181,7 @@ Complex complex_ustvari(double r, double i) {
 	return c;
 }
 
-Complex complex_mno�enje(Complex a, Complex b) {
+Complex complex_množenje(Complex a, Complex b) {
 	Complex c;
 	c.real = a.real * b.real - a.imag * b.imag;
 	c.imag = a.real * b.imag + a.imag * b.real;
@@ -234,7 +234,7 @@ void FFT(double* casovna_vrsta, Complex* izhod, int n) {
 			s = sin(-2.0 * PI * j / n2);
 			for (k = j; k < n; k = k + n2) {
 				k1 = k + n1;
-				t = complex_mno�enje(izhod[k1], complex_ustvari(c, s));
+				t = complex_množenje(izhod[k1], complex_ustvari(c, s));
 				u = izhod[k];
 				izhod[k] = complex_add(u, t);
 				izhod[k1] = complex_sub(u, t);
