@@ -4,10 +4,10 @@ V tej mapi se nahajajo primeri kot, ki smo jih ustvarili pri predmetu Numerične
 
 ## Pregled metod
 
-- Numerično iskanje ničel
-- Numerično odvajanje
-- Numerično integriranje
-- Numerično reševanje diferencialnih enačb
+1.1 Numerično iskanje ničel
+1.2 Numerično odvajanje
+1.3 Numerično integriranje
+1.4 Numerično reševanje diferencialnih enačb
 - Diskretne furierjeva transformacija
 - Hitra furierjeva transformacija
 - Gausova eliminacija
@@ -17,6 +17,6 @@ V tej mapi se nahajajo primeri kot, ki smo jih ustvarili pri predmetu Numerične
 
 - Model sončnega sistema
 - Monte Carlo Molekularna Dinamika
-.
-.
-.
+- Model dveh populacij živali v ekosistem
+- Model sklopljenega nihanja
+-
