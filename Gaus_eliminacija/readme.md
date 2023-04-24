@@ -13,26 +13,32 @@ $$ 2*𝑥_1 +5*𝑥_2+8*𝑥_3=44 $$
 $$ 3*𝑥_1+8*𝑥_2+14*𝑥_3=76 $$
 
 Bi matrika **A** imela obliko:
-$$A = \begin{vmatrix}
+$$
+A = \begin{vmatrix}
 1 & 2 & 3\\
 2 & 5 & 8\\
 3 & 8 & 14
-\end{vmatrix}$$
+\end{vmatrix}
+$$
 
 Vektor **b**, bi imel obliko:
-$$b = \begin{vmatrix}
+$$
+b = \begin{vmatrix}
 17\\
 44\\
 76
-\end{vmatrix}$$
+\end{vmatrix}
+$$
 
 Tako bi zapis v datoteku matrix.dat imel obliko:
 Vektor **b**, bi imel obliko:
-$$\begin{matrix}
+$$
+\begin{matrix}
 1 & 2 & 3 & 17\\
 2 & 5 & 8 & 44\\
 3 & 8 & 14 & 79
-\end{matrix}$$
+\end{matrix}
+$$
 
 **Pomembno je, da so posamezni elementi ločeni s presledkom**
 
