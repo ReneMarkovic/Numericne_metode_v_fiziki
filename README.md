@@ -9,7 +9,7 @@ V tej mapi se nahajajo primeri kot, ki smo jih ustvarili pri predmetu Numerične
 - Numerično integriranje
 - Numerično reševanje diferencialnih enačb
 - Diskretne furierjeva transformacija
-- Histra furierjeva transformacija
+- Hitra furierjeva transformacija
 - Gausova eliminacija
 - Naključna števila
 
