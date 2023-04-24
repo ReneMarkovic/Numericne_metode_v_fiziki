@@ -25,6 +25,7 @@ A = \begin{vmatrix}
 $$
 
 Vektor **b**, bi imel obliko:
+
 $$
 b = \begin{vmatrix}
 17\\
@@ -35,6 +36,7 @@ $$
 
 Tako bi zapis v datoteku matrix.dat imel obliko:
 Vektor **b**, bi imel obliko:
+
 $$
 \begin{matrix}
 1 & 2 & 3 & 17\\
