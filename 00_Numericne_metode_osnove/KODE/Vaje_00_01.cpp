@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+#define PI 4*atan(1)
 
 //Funkcije
 #include "Header.h"
@@ -15,5 +16,8 @@
 int main(void) {
 	primer_1();
 	primer_2(1000000);
+	primer_3();
+	primer_4(7919);
+	primer_5(1.0);
 	return 0;
 }
