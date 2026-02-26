@@ -221,7 +221,7 @@ Logične operacije nam omogočajo sprejemanje odločitev v kodi. V fiziki jih up
 - < (manj),
 - > (več),
 - <= (manj ali enako),
-- ->= (več ali enako).
+- >= (več ali enako).
 
 **Logični vezniki:**
 - && (IN - oba pogoja morata držati),
