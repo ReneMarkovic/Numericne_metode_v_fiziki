@@ -31,10 +31,8 @@ using namespace std;
 
 double dt = 10*60; //[s] Integracijski korak v enotah sekunda
 double leto = 2.0; //čas trajanje simulacije v enotah let (na Zemlji);
-
-
-
 double N = leto * 365 * 24 * 60 * 60 / dt; // čtevilo integracijskih korakov
+
 int dn = int(N / 2000.0); // časovno okno za posodovitev izpisa na zaslon.
 
 //Uvozimo knjičico s funkcijami.

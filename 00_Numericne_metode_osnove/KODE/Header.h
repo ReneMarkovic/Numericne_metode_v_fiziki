@@ -1,7 +1,14 @@
+/*
+
+#pragma once pomeni, 
+
+*/
+
 #pragma once
+
 void primer_1(void) {
-	int i = 101.9;// Definiramo spremenljivko i, ki je tipa int (celo število)
-	double j = 101.3; //Definiramo spremenljivko j, ki je tipa double (realno število)
+	int i = 101.9;// Definiramo spremenljivko i, ki je tipa int (celo Å¡tevilo)
+	double j = 101.3; //Definiramo spremenljivko j, ki je tipa double (realno Å¡tevilo)
 	char n[] = "Fizika"; //DEfiniramo spremenljivko n, ki je polje simbolov
 	bool s = true; //Definiramo spremenljivko s, ki je tipa bool (Da/Ne binarno)
 	/*
@@ -17,7 +24,7 @@ void primer_1(void) {
 using namespace std;
 
 void primer_2(int stevilo) {
-	printf("Èe imamo %d spremenljivk doloèenega tipa, te zasedejo:\n", stevilo);
+	printf("ÄŒe imamo %d spremenljivk doloÄenega tipa, te zasedejo:\n", stevilo);
 	printf("Velikost spremenljivke char = %d B\n", sizeof(char) * stevilo);
 	printf("Velikost spremenljivke double = %d B\n", sizeof(double) * stevilo);
 	printf("Velikost spremenljivke int = %d B\n", sizeof(int) * stevilo);
@@ -38,30 +45,31 @@ void primer_3(void){
 
 int primer_4(int a) {
 	if (a == 0 || a == 1) {
-		printf("Število %d po definiciji ni praštevilo.\n", a);
+		printf("Å tevilo %d po definiciji ni praÅ¡tevilo.\n", a);
 		return 0;
 	}
 	if (a == 2 || a == 3) {
-		printf("Stevilo %d je praštevilo", a);
+		printf("Stevilo %d je praÅ¡tevilo", a);
 		return 1;
 	}
 	if (a % 2 == 0) {
-		printf("Število %d po definiciji ni praštevilo.\n", a);
+		printf("Å tevilo %d po definiciji ni praÅ¡tevilo.\n", a);
 		return 0;
 	}
 	if (a % 3 == 0) {
-		printf("Število %d po definiciji ni praštevilo.\n", a);
+		printf("Å tevilo %d po definiciji ni praÅ¡tevilo.\n", a);
 		return 0;
 	}
 	int i ;
 	int check = 0;
+
 	for (i = 4; i < a; i++) {
 		if (a % i == 0) {
-			printf("Število %d po definiciji ni praštevilo.\n", a);
+			printf("Å tevilo %d po definiciji ni praÅ¡tevilo.\n", a);
 			return 0;
 		}
 	}
-	printf("Stevilo %d je praštevilo", a);
+	printf("Stevilo %d je praÅ¡tevilo", a);
 	return 1;
 }
 
