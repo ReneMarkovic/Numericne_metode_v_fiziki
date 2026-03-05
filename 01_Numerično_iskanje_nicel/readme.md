@@ -27,7 +27,7 @@ posledično s to metodo ne moremo najti ničel funkcij, ki ne spreminjajo predzn
 7. Ponovimo korake 2-3, dokler ne najdemo ničle ali dokler interval $[a,b]$ ni dovolj majhen.
 
 ![slika_bisekcije](./FIGS/NMF_V01.svg)
-![animacija_bisekcije](./FIGS/Bisekcija.mp4)
+![animacija_bisekcije](./FIGS/Bisekcija.gif)
 
 # 2. Sekantna metoda
 
@@ -44,7 +44,7 @@ Stabilnost metode je odvisna od izbire začetnih približkov, zato je pomembno, 
 5. Posodobimo približke: $x_0 = x_1$ in $x_1 = x_2$.
 6. Ponovimo korake 2-5, dokler ne najdemo ničle ali dokler se približki ne konvergirajo.
 
-![animacija_sekantne_metode](./FIGS/Sekantna.mp4)
+![animacija_sekantne_metode](./FIGS/Sekantna.gif)
 
 
 
