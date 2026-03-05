@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define eps 0.000001
+#define gloabl_eps 0.000001
 
 #include "funkcije.h"
 

@@ -43,10 +43,26 @@ double fabs(double x) {
 	return sqrt(x*x);
 }
 
-double bisekcija(double a, double b,int i){
+bool preveri_ab_bisekcija(double a, double b, int i){
+	double fa, fb;
+	fa = f(a, i);
+	fb = f(b, i);
+	if (fa*fb > 0) return false;
+	else return true;
+}
+
+double bisekcija(double a, double b,int i, double eps = 0.001){
+	printf("#### ZACETEK BISEKCIJE ####\n");
+
 	double xa, xb, xc;
 	double fa, fb, fc;
-	double eps = 0.0001;
+
+	bool check = preveri_ab_bisekcija(a, b, i);
+	if (!check){
+		printf("Izbran interval [%f,%f] ne ustreza pogoju f(a)*f(b) < 0\n", a, b);
+		printf("Iskanje nićel ni bilo uspešno.\n");
+		return 0.0;
+	};
 
 	xa = a;
 	xb = b;
@@ -69,7 +85,8 @@ double bisekcija(double a, double b,int i){
 		xc = (xa + xb) / 2.0;
 		fc = f(xc, i);
 	}
-
+	printf("#### KONEC BISEKCIJE ####\n");
+	printf("Rešitev |f(x)|<=eps je pri x = %f\n", xc);
 	return xc;
 }
 
@@ -108,7 +125,7 @@ double Newton(double a, int i) {
 	return x1;
 }
 
-//Preveri ali sta za�etna pogoja vredu
+//Preveri ali sta začetna pogoja vredu
 int preveri_init(double a, double b,int i,int metoda,int N) {
 	double fa, fb;
 	double dx = (b-a)/N+0.00001;
@@ -121,7 +138,7 @@ int preveri_init(double a, double b,int i,int metoda,int N) {
 			if (metoda == 0) resitev=bisekcija(x,x+dx, i);
 			if (metoda == 1) resitev = sekantna_metoda(x, x + dx, i);
 			if (metoda == 2) resitev = Newton(x, i);
-			printf("Najdena je ni�la pri x = %f\n",resitev);
+			printf("Najdena je ni�la pri x = %f\n",resitev);
 			stej += 1;
 		}
 	}
