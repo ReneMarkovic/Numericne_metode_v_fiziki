@@ -1,3 +1,6 @@
 manim_env/
 animacije/
 .claude/settings.local.json
+
+# MyST build outputs
+_build

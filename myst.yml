@@ -1,0 +1,15 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  id: 2a2186cf-7ef5-41ab-9870-ee77f7d6dd19
+  # title: Numerične metode v fiziki
+  # description: Gradivo za vaje pri numeričnih metodah v fiziki za študente 2. letnika fizike na Fakulteti za naravoslovje in matematiko Univerze va mariboru.
+  # keywords: []
+  # authors: []
+  github: https://github.com/ReneMarkovic/Numericne_metode_v_fiziki
+  # To autogenerate a Table of Contents, run "jupyter book init --write-toc"
+site:
+  template: book-theme
+  # options:
+  #   favicon: favicon.ico
+  #   logo: site_logo.png

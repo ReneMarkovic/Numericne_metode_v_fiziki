@@ -1,3 +1,13 @@
+#include <stdio.h>
+
+const char* ime_funkcije(int i) {
+    if (i == 1) return "A";
+    if (i == 2) return "B";
+    if (i == 3) return "C";
+    if (i == 4) return "D";
+    return "?";
+}
+
 //Definiramo funkcijo
 double f(double x, int izberi) {
 	double y;
@@ -22,7 +32,7 @@ double f(double x, int izberi) {
 double df(double x, int izberi) {
 	double y;
 	if (izberi == 1) {
-		y = -sin(x) - exp(x)*(x+ 1);
+		y = -sin(x) - exp(x)*(x + 1);
 	}
 	if (izberi == 2) {
 		y = 4*pow(x, 3) - 1;
@@ -51,11 +61,12 @@ bool preveri_ab_bisekcija(double a, double b, int i){
 	else return true;
 }
 
-double bisekcija(double a, double b,int i, double eps = 0.001){
+double bisekcija(double a, double b, int i, double eps, FILE* out) {
 	printf("#### ZACETEK BISEKCIJE ####\n");
 
 	double xa, xb, xc;
 	double fa, fb, fc;
+	int iters = 0;
 
 	bool check = preveri_ab_bisekcija(a, b, i);
 	if (!check){
@@ -84,16 +95,23 @@ double bisekcija(double a, double b,int i, double eps = 0.001){
 
 		xc = (xa + xb) / 2.0;
 		fc = f(xc, i);
+		iters++;
 	}
 	printf("#### KONEC BISEKCIJE ####\n");
 	printf("Rešitev |f(x)|<=eps je pri x = %f\n", xc);
+
+	if (out) {
+		fprintf(out, "%s,BISEKCIJA,EPS,%.6f\n", ime_funkcije(i), eps);
+		fprintf(out, "%s,BISEKCIJA,STEVILO ITERACIJ,%d\n", ime_funkcije(i), iters);
+		fprintf(out, "%s,BISEKCIJA,RESITEV,%.6f\n", ime_funkcije(i), xc);
+	}
 	return xc;
 }
 
-double sekantna_metoda(double a, double b, int i) {
+double sekantna_metoda(double a, double b, int i, double eps, FILE* out) {
 	double x0 = a;
 	double x1 = b;
-	double eps = 0.0001;
+	int iters = 0;
 	double k = (f(x1, i) - f(x0, i)) / (x1 - x0);
 	double x2 = x1 - f(x1, i) / k;
 	double f2 = f(x2, i);
@@ -104,13 +122,19 @@ double sekantna_metoda(double a, double b, int i) {
 		k = (f(x1, i) - f(x0, i)) / (x1 - x0);
 		x2 = x1 - f(x1, i) / k;
 		f2 = f(x2, i);
+		iters++;
+	}
+	if (out) {
+		fprintf(out, "%s,SEKANTNA,EPS,%.6f\n", ime_funkcije(i), eps);
+		fprintf(out, "%s,SEKANTNA,STEVILO ITERACIJ,%d\n", ime_funkcije(i), iters);
+		fprintf(out, "%s,SEKANTNA,RESITEV,%.6f\n", ime_funkcije(i), x2);
 	}
 	return x2;
 }
 
-double Newton(double a, int i) {
+double Newton(double a, int i, double eps, FILE* out) {
 	double x0 = a;
-	double eps = 0.0001;
+	int iters = 0;
 	double k = f(x0, i)/df(x0, i);
 	double x1 = x0 - k;
 
@@ -121,12 +145,18 @@ double Newton(double a, int i) {
 		k = f(x0, i) / df(x0, i);
 		x1 = x0 - k;
 		f1 = f(x1, i);
+		iters++;
+	}
+	if (out) {
+		fprintf(out, "%s,NEWTON,EPS,%.6f\n", ime_funkcije(i), eps);
+		fprintf(out, "%s,NEWTON,STEVILO ITERACIJ,%d\n", ime_funkcije(i), iters);
+		fprintf(out, "%s,NEWTON,RESITEV,%.6f\n", ime_funkcije(i), x1);
 	}
 	return x1;
 }
 
 //Preveri ali sta začetna pogoja vredu
-int preveri_init(double a, double b,int i,int metoda,int N) {
+int preveri_init(double a, double b, int i, int metoda, int N, double eps, FILE* out) {
 	double fa, fb;
 	double dx = (b-a)/N+0.00001;
 	int stej=0;
@@ -135,10 +165,10 @@ int preveri_init(double a, double b,int i,int metoda,int N) {
 		fa = f(x, i);
 		fb = f(x+dx, i);
 		if (fa*fb < 0) {
-			if (metoda == 0) resitev=bisekcija(x,x+dx, i);
-			if (metoda == 1) resitev = sekantna_metoda(x, x + dx, i);
-			if (metoda == 2) resitev = Newton(x, i);
-			printf("Najdena je ni�la pri x = %f\n",resitev);
+			if (metoda == 0) resitev = bisekcija(x, x+dx, i, eps, out);
+			if (metoda == 1) resitev = sekantna_metoda(x, x+dx, i, eps, out);
+			if (metoda == 2) resitev = Newton(x, i, eps, out);
+			printf("Najdena je ni\xc4\x8dla pri x = %f\n", resitev);
 			stej += 1;
 		}
 	}

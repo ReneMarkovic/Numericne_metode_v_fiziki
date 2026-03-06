@@ -22,12 +22,19 @@ int main(){
 	int OK;
 	int metoda = 2;
 	int N = 100000;
+	double eps = 0.0001;
 
-	for (i = 1; i < 5; i++) {
-		OK = preveri_init(a, b, i, metoda, N);
-		printf("%d\n", OK);
-		printf("Vrednost funkcije f(%.2f) = %.2f\n", x, f(x, i));
+	FILE* out = fopen("rezultati.csv", "w+");
+	if (out) fprintf(out, "FUNKCIJA,METODA,PARAMETER,VREDNOST\n");
+
+	for(int j = 0; j < 3; j++){
+		for (i = 1; i < 5; i++) {
+			OK = preveri_init(a, b, i, j, N, eps, out);
+			printf("%d\n", OK);
+			printf("Vrednost funkcije f(%.2f) = %.2f\n", x, f(x, i));
+		}
 	}
+	if (out) fclose(out);
     return 0;
 }
 
