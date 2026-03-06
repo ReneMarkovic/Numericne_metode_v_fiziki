@@ -29,22 +29,22 @@ Pri vajah bomo uporabili tri različne metode za numerično odvajanje, ki se raz
 - **Eno-stranski odvod (Forward Difference):** Uporablja dve točki in ima napako reda $h$.
 $$ f'(x) \approx \frac{f(x+h)-f(x)}{h} $$
 
-![Animacija_enostranski_odvod](./animacije/ForwardDifference.gif)
+![Animacija_enostranski_odvod](./media/ForwardDifference.gif)
 
 - **Dvo-stranski odvod (Central Difference):** Uporablja točke na obeh straneh intervala, kar poveča natančnost na red $h^2$.
 $$ f'(x) \approx \frac{f(x+h)-f(x-h)}{2h} $$
 
-![Animacija_dvostranski_odvod](./animacije/CentralDifference.gif)
+![Animacija_dvostranski_odvod](./media/CentralDifference.gif)
 
 - **Središčna diferenca (Central Difference):** Uporablja tri točke in ima napako reda $h^4$, kar omogoča še bolj natančno aproksimacijo odvoda.
 $$f'(x)\approx \frac{f(x+h)+f(x-h)-2*f(x)}{4h}$$
 
-![Animacija_sredisnja_diferenca](./animacije/CentralDifference4.gif)
+![Animacija_sredisnja_diferenca](./media/CentralDifference4.gif)
 
 - **Drugi odvod:** Omogoča izračun ukrivljenosti funkcije in ima napako reda $h^2$.
 $$f''(x) \approx \frac{f(x+h)+f(x-h)-2*f(x)}{h^2}$$
 
-![Animacija_drugi_odvod](./animacije/SecondDerivative.gif)
+![Animacija_drugi_odvod](./media/SecondDerivative.gif)
 
 
 ### Naloga 1.1: Implementacija numeričnega odvajanja
@@ -78,7 +78,7 @@ $$ F = \sum_{i=1}^n f(x_i) \Delta x$$
 
 ![int_02](./media/int_02.png)
 
-![!animacija_pravilo_pravokotnikov](./animacije/PraviloPravokotnikov_ManimCE_v0.20.1.gif)
+![!animacija_pravilo_pravokotnikov](./media/PraviloPravokotnikov_ManimCE_v0.20.1.gif)
 
 
 - **Trapezno pravilo:** Ta metoda bolje opiše trend funkcije znotraj intervala $h$ tako, da namesto pravokotnikov uporabi trapeze.
@@ -87,13 +87,13 @@ $$ F = \frac{y_0 \cdot h}{2}  + h \sum_{i=1}^{n-1} f(x_i) +  \frac{y_n \cdot h}{
 
 ![int_03](./media/int_03.png)
 
-![animacija_trapezno_pravilo](./animacije/TrapeznoPravilo_ManimCE_v0.20.1.gif) 
+![animacija_trapezno_pravilo](./media/TrapeznoPravilo_ManimCE_v0.20.1.gif) 
 
 - **Simpsonovo pravilo:** Za še natančnejšo aproksimacijo trenda znotraj intervala $h$ uporabimo kvadratno enačbo (parabolo).
 
 ![int_04](./media/int_04.png)
 
-![animacija_simpsonova_pravilo](./animacije/SimpsonovoPravilo_ManimCE_v0.20.1.gif)
+![animacija_simpsonova_pravilo](./media/SimpsonovoPravilo_ManimCE_v0.20.1.gif)
 
 ### Naloga 2.1: Implementacija numeričnega integriranja
 
