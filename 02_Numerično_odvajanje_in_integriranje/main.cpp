@@ -5,6 +5,8 @@
 #include "numerical_differentiation.h"
 #include "numerical_integration.h"
 
+#dissable: warnings 4992
+
 #define PI (4.0 * atan(1.0))
 
 // ============================================================
