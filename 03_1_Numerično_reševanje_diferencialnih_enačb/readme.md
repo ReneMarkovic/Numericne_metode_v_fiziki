@@ -105,6 +105,11 @@ Ustvari datoteko `solve_ode.h`, ki vsebuje naslednje funkcije:
 - `newton_euler_dynamics(v, dt)` — en korak Eulerjeve metode za prosti pad
 - `newton_RK4_dynamics(v, dt)` — en korak RK4 metode za prosti pad
 
+Za diferencialno enačbo $y' = f(x, y) = \frac{5x^2 - y}{e^{x+y}}$ z začetnim pogojem $y(0) = 1$:
+
+- Reši enačbo na intervalu $x \in [0, 2]$ z obema metodama in korakom $h = 0{,}1$.
+- Primerjaj rešitvi med seboj in analiziraj razliko.
+- 
 ### Naloga 3.2: Prosti pad z zračnim uporom
 
 Simuliraj prosti pad krogle za čas $t \in [0, 120]\ \text{s}$ z začetno hitrostjo $v(0) = 0$.
@@ -121,13 +126,6 @@ Ponovi simulacijo z različnimi vrednostmi $\Delta t \in \{1{,}0,\ 0{,}1,\ 0{,}0
 - Primerjaj napako Eulerjeve in RK4 metode glede na analitično rešitev $v(t) = v_T \tanh(g t / v_T)$.
 - Kako se napaka spreminja z zmanjševanjem koraka $\Delta t$?
 - Pri kateri vrednosti $\Delta t$ Eulerjeva metoda postane nestabilna?
-
-### Naloga 3.4: Splošna diferencialna enačba
-
-Za diferencialno enačbo $y' = f(x, y) = \frac{5x^2 - y}{e^{x+y}}$ z začetnim pogojem $y(0) = 1$:
-
-- Reši enačbo na intervalu $x \in [0, 2]$ z obema metodama in korakom $h = 0{,}1$.
-- Primerjaj rešitvi med seboj in analiziraj razliko.
 
 ----
 
