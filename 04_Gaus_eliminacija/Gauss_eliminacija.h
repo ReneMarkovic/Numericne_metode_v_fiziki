@@ -16,10 +16,15 @@ void izpisi_matriko_na_terminal(vector<vector<double>> A);
 //Izvedba Gauss eliminacije
 vector<double> Gauss_eliminacija(vector<vector<double>> A);
 
+//Izvedba Gauss eliminacije s pivotiranje
+vector<double> Gauss_eliminacija_pivot(vector<vector<double>> A);
+
 //Izpiši rešitev
 void izpis_resitev(vector <double> R);
 
+//Shrani matriko v datoteko
 void shrani_matriko_v_datoteko(const vector<vector<double>>& A);
 
+//Preberi matriko iz datoteke
 vector<vector<double>> preberi_matriko_iz_datoteke(const string& filename);
 

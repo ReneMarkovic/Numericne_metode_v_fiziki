@@ -50,6 +50,32 @@ vector<double> Gauss_eliminacija(vector<vector<double>> A) {
 	int n = A.size();
 	double fac;
 
+	// Eliminacija
+	for (stolpec = 0; stolpec < n; stolpec++) {
+		for (vrstica = stolpec + 1; vrstica < n; vrstica++) {
+			fac = A[vrstica][stolpec] / A[stolpec][stolpec];
+			for (k = 0; k < n + 1; k++) {
+				A[vrstica][k] = A[vrstica][k] - A[stolpec][k] * fac;
+			}
+		}
+	} // Od te točke dalje je matrika A postala matrika U
+
+	// Rešimo sistem enačb (back substitution)
+	vector<double> x(n);
+	for (vrstica = n - 1; vrstica >= 0; vrstica--) {
+		x[vrstica] = A[vrstica][n] / A[vrstica][vrstica];
+		for (k = vrstica - 1; k >= 0; k--) {
+			A[k][n] -= A[k][vrstica] * x[vrstica];
+		}
+	}
+	return x;
+}
+
+vector<double> Gauss_eliminacija_pivot(vector<vector<double>> A) {
+	int stolpec, vrstica, k;
+	int n = A.size();
+	double fac;
+
 	//LU dekompozicija;
 
 	for (stolpec = 0; stolpec < n; stolpec++) {
@@ -100,7 +126,6 @@ void izpis_resitev(vector <double> R) {
 		cout << "x(" << i + 1 << ") = " << R[i] << "\n";
 	}
 }
-
 
 //Shrani matriko A v datoteko z imanom filename
 void shrani_matriko_v_datoteko(const vector<vector<double>>& A) {
