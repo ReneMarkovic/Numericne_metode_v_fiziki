@@ -1,147 +1,117 @@
 # Gaussova eliminacija
 
-Gaussova eliminacija je numerična metoda za reševanje sistema linearnih enačb. Sestoji iz postopnega spreminjanja matrike sistema v stopljeno vrstično obliko (tj. zgornje trikotne matrike), kjer se nato lahko rešitev sistema enačb enostavno izračuna s postopkom povratne substitucije. Gaussova eliminacija je široko uporabljena v matematiki, fiziki, inženirstvu, računalništvu in drugih znanstvenih in tehničnih panogah.
+Gaussova eliminacija je numerična metoda za reševanje sistema linearnih enačb oblike:
 
-V mapi se nahaja tudi datoteka **matrix.dat**, ki jo program lahko prebere. Datoteka vsebuje matriko **A** in vektor **b**. Iščemo pa rešitev za enačbo:
+$$A \mathbf{x} = \mathbf{b}$$
 
-$$A x = b$$
+kjer je $A$ matrika koeficientov, $\mathbf{x}$ vektor neznank in $\mathbf{b}$ vektor prostih členov. Metoda temelji na sistematičnem spreminjanju razširjene matrike $[A|\mathbf{b}]$ v zgornje trikotno obliko, iz katere rešitev dobimo s povratno substitucijo.
 
-V datoteku je tako zadnji stolpec rezerviran za vrednosti vektorja **b**. Če bi tako hoteli rešiti enačbo:
+---
 
-$$ 𝑥_1 + 2 x_2 + 3 𝑥_3 = 17 $$
+## Teorija
 
-$$ 2 𝑥_1 + 5 𝑥_2 + 8 𝑥_3 = 44 $$
+### LU razcep
 
-$$ 3 𝑥_1+8 𝑥_2 + 14 𝑥_3=76 $$
+Gaussova eliminacija je v bistvu LU razcep matrike $A$:
 
-Bi matrika **A** imela obliko:
+$$A = L \cdot U$$
 
-$$
-A = \begin{vmatrix}
-1 & 2 & 3\\
-2 & 5 & 8\\
-3 & 8 & 14
-\end{vmatrix}
-$$
+kjer je:
+- $L$ — spodnje trikotna matrika z enicami na diagonali (*lower triangular*)
+- $U$ — zgornja trikotna matrika (*upper triangular*)
 
-Vektor **b**, bi imel obliko:
+Med eliminacijo postopoma uničimo elemente pod diagonalo. Za vsak stolpec $j$ in vsako vrstico $i > j$ izračunamo faktor:
 
-$$
-b = \begin{vmatrix}
-17\\
-44\\
-76
-\end{vmatrix}
-$$
+$$l_{ij} = \frac{a_{ij}}{a_{jj}}$$
 
-Tako bi zapis v datoteku matrix.dat imel obliko:
-Vektor **b**, bi imel obliko:
+in posodobimo vrstico:
 
-$$
-\begin{matrix}
-1 & 2 & 3 & 17\\
-2 & 5 & 8 & 44\\
-3 & 8 & 14 & 79
-\end{matrix}
-$$
+$$a_{ik} \leftarrow a_{ik} - l_{ij} \cdot a_{jk}, \quad k = j, j+1, \ldots, n$$
 
-**Pomembno je, da so posamezni elementi ločeni s presledkom**
+Po končani eliminaciji matrika $A$ vsebuje $U$, faktorji $l_{ij}$ pa implicitno določajo $L$.
 
+### Pivotiranje
 
-## Predstavitev kode
+Med eliminacijo se lahko zgodi, da je diagonalni element $a_{jj} = 0$ ali zelo majhen, kar povzroči numerično nestabilnost (deljenje z nič ali izguba natančnosti).
 
-Ta projekt vsebuje implementacijo Gaussove eliminacije v programskem jeziku C++. Vključuje tri datoteke:
+**Delno pivotiranje** (*partial pivoting*) to reši tako, da pred vsako eliminacijo v stolpcu $j$ poiščemo vrstico z največjim absolutnim vrednostjo in jo zamenjamo z vrstico $j$:
 
-- `gauss_eliminacija.h` - ta datoteka vsebuje prototipe funkcij, ki so uporabljene pri implementaciji Gaussove eliminacije.
-- `gauss_eliminacija.cpp` - ta datoteka vsebuje implementacijo funkcij, ki so definirane v `gauss_eliminacija.h`.
-- `main.cpp` - ta datoteka vsebuje primer uporabe funkcij v `gauss_eliminacija.h`.
+$$\text{izberi } k = \arg\max_{i \geq j} |a_{ij}|, \quad \text{nato zamenjaj vrstici } j \text{ in } k$$
+
+To zagotavlja, da so faktorji $|l_{ij}| \leq 1$, kar preprečuje numerično rast napak.
+
+### Povratna substitucija
+
+Ko je matrika $A$ preoblikovana v $U$, rešimo sistem $U\mathbf{x} = \mathbf{b}'$ od spodaj navzgor:
+
+$$x_i = \frac{b'_i - \sum_{k=i+1}^{n} u_{ik} x_k}{u_{ii}}, \quad i = n, n-1, \ldots, 1$$
+
+---
+
+## Implementacija
+
+Projekt vsebuje tri datoteke:
+
+- `Gauss_eliminacija.h` — prototipi funkcij
+- `Gauss_eliminacija_vaje.cpp` — implementacija funkcij
+- `main.cpp` — primer uporabe
 
 ### Funkcije
 
-- `void vnesi_matriko_in_vektor(vector<vector<double>>& A)` - Funkcija, ki uporabniku omogoča vnos matrike A in vektorja b.
-- `void izpisi_matriko_na_terminal(vector<vector<double>> A)` - Funkcija, ki izpiše matriko A v terminal.
-- `vector<double> Gauss_eliminacija(vector<vector<double>> A)` - Funkcija, ki izvede Gaussovo eliminacijo na matriki A in vrne vektor rešitev.
-- `void izpis_rešitev(vector <double> R)` - Funkcija, ki izpiše vektor rešitev.
-- `void shrani_matriko_v_datoteko(const vector<vector<double>>& A)` - Funkcija, ki shrani matriko A v datoteko z imenom, ki ga vnese uporabnik preko standardnega vhoda.
-- `vector<vector<double>> preberi_matriko_iz_datoteke(const string& filename)` - Funkcija, ki prebere matriko, ki je shranjena v datoteki z imenom `filename`.
-- `int main()` - Glavna funkcija, ki izvede primer uporabe funkcij v `gauss_eliminacija.h`.
+| Funkcija | Opis |
+|---|---|
+| `vnesi_matriko_in_vektor(A)` | Interaktivni vnos matrike $A$ in vektorja $\mathbf{b}$ |
+| `izpisi_matriko_na_terminal(A)` | Izpis razširjene matrike $[A\|\mathbf{b}]$ v terminal |
+| `Gauss_eliminacija(A)` | Izvede LU razcep z delnim pivotiranjem in povratno substitucijo, vrne vektor rešitev |
+| `izpis_resitev(R)` | Izpis rešitev $x_1, x_2, \ldots$ |
+| `shrani_matriko_v_datoteko(A)` | Shrani matriko v datoteko (ime vnese uporabnik) |
+| `preberi_matriko_iz_datoteke(filename)` | Prebere matriko iz datoteke |
 
-### Uporaba
+---
 
-Kako uporabiti program za Linux, OS X in Windows:
+## Uporaba
 
-#### Linux
+### Format datoteke `matrix.dat`
 
-Za uporabo programa na Linuxu moramo najprej prenesti datoteke projekta iz Github repozitorija. Lahko uporabimo ukaz `git clone`:
+Matrika $A$ in vektor $\mathbf{b}$ sta shranjena skupaj kot razširjena matrika. Vsaka vrstica ustreza eni enačbi, zadnji element v vrstici je vrednost $b_i$. Elementi so ločeni s presledki.
 
-```sh
-git clone https://github.com/your-username/your-repository.git
+**Primer** — sistem treh enačb:
+
+$$x_1 + 2x_2 + 3x_3 = 17$$
+$$2x_1 + 5x_2 + 8x_3 = 44$$
+$$3x_1 + 8x_2 + 14x_3 = 76$$
+
+Zapis v `matrix.dat`:
+
+```
+1 2 3 17
+2 5 8 44
+3 8 14 76
 ```
 
-Nato se premaknemo v mapo s projektom:
+### Zagon programa
 
-```sh
-cd your-repository
-```
-
-Za zagon programa lahko uporabimo ukaz:
-
-```sh
-./gauss
-```
-
-#### OS X
-
-Za uporabo programa na OS X moramo najprej prenesti datoteke projekta iz Github repozitorija. Lahko uporabimo ukaz `git clone`:
-
-```sh
-git clone https://github.com/your-username/your-repository.git
-```
-
-Nato se premaknemo v mapo s projektom:
-
-```sh
-cd your-repository
-```
-
-Za zagon programa lahko uporabimo ukaz:
-
-```sh
-./gauss
-```
-
-Če imamo težave s zagonom programa, lahko poskusimo odpreti terminal in se premaknemo v mapo s projektom, nato pa uporabimo ukaz:
-
-```sh
-chmod +x gauss
-```
-
-Ta ukaz bo omogočil izvajanje programa.
-
-#### Windows
-
-Za uporabo programa na Windowsu moramo najprej prenesti datoteke projekta iz Github repozitorija. Lahko uporabimo ukaz `git clone`:
-
-```sh
-git clone https://github.com/your-username/your-repository.git
-```
-
-Nato se premaknemo v mapo s projektom:
-
-```sh
-cd your-repository
-```
-
-Za zagon programa lahko odpremo CMD in se premaknemo v mapo s projektom, nato pa uporabimo ukaz:
-
+**Windows:**
 ```sh
 gauss.exe
 ```
 
-Ali pa dvokliknemo na datoteko `gauss.exe`, ki se nahaja v mapi s projektom.
+**Linux / OS X:**
+```sh
+./gauss
+```
 
-Če imamo težave s zagonom programa, lahko poskusimo z desnim klikom na datoteko `gauss.exe` in izberemo možnost "Properties". V oknu Properties izberemo zavihek "Compatibility" in nato označimo polje "Run this program as an administrator" ter shranimo spremembe.
+Program najprej vpraša, ali želite vnesti matriko ročno ali jo prebrati iz datoteke `matrix.dat`.
 
-## Povzetek
+# Domače delo
 
-Uporaba programa na različnih operacijskih sistemih se nekoliko razlikuje, vendar je na splošno precej enostavna. Z uporabo git repozitorija lahko prenesemo datoteke projekta, nato pa lahko uporabimo ustrezne ukaze za zagon programa.
+1. Slika (1) prikazuje shemo električnega tokogroga. Vaša naloga je, da **analitično** in s pomočjo **računalnika** rešitev sistem enačb in določite posamezne tokove, ki tečejo po električnem tokokrogu.
+![Slika_1](media/04_01.png)
+
+2. Slika (2) prikazuje križišča treh enosmernih ulic. Da bi promet nemoteno potekal, mora biti število avtomobilov, ki vstopijo v križišče v eni minuti, enako številu avtomobilov, ki izstopijo iz križišča. Na primer, v enem izmed križišč vsako minuto vstopi $x_1+10$ avtomobilov in izstopi $x_2+14$. Tako mora za to križišče veljati enačba:
+   
+$$x_1 + 10 = x_2 + 14$$
+
+Z uporabo Gaussove eliminacije rešite sistem enačb (za spremenljivke $x_1,x_2,x_3$), ki jih dobite iz enačb za posamezna križišča.
+
+![Slika_2](media/04_02.png) avtomobilov, zato velja enačba:

@@ -1,6 +1,4 @@
-#ifndef GAUSS_ELIMINACIJA_H
-#define GAUSS_ELIMINACIJA_H
-
+#pragma once
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -24,6 +22,4 @@ void izpis_resitev(vector <double> R);
 void shrani_matriko_v_datoteko(const vector<vector<double>>& A);
 
 vector<vector<double>> preberi_matriko_iz_datoteke(const string& filename);
-
-#endif // !GAUSS_ELIMINACIJA_H
 

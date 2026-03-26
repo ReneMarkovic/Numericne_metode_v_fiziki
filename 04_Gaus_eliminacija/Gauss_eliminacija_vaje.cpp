@@ -5,10 +5,6 @@
 
 #include "Gauss_eliminacija.h"
 
-/*
-V tej datoteki definimarmo funkcije, katerih prototipi obstajajo v "Gauss_eliminacija.h"
-*/
-
 using namespace std;
 
 void vnesi_matriko_in_vektor(vector<vector<double>>& A) {
