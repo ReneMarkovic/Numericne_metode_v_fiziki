@@ -8,7 +8,7 @@
 
 Izhajamo iz postavke, ki jo je Joseph Fourier formaliziral leta 1822: **vsak periodičen signal s periodo $T$ je mogoče natančno zapisati kot neskončno vsoto sinusov in kosinusov** (oz. kompleksnih eksponentov):
 
-$$f(t) = \frac{a_0}{2} + \sum_{n=1}^{\infty} \left[ a_n \cos\!\left(\frac{2\pi n}{T}t\right) + b_n \sin\!\left(\frac{2\pi n}{T}t\right) \right]$$
+$$f(t) = \frac{a_0}{2} + \sum_{n=1}^{\infty} \left[ a_n \cos\left(\frac{2\pi n}{T}t\right) + b_n \sin\left(\frac{2\pi n}{T}t\right) \right]$$
 
 kjer so Fourierovi koeficienti:
 
