@@ -12,7 +12,7 @@ $$f(t) = \frac{a_0}{2} + \sum_{n=1}^{\infty} \left[ a_n \cos\left(\frac{2\pi n}{
 
 kjer so Fourierovi koeficienti:
 
-$$a_n = \frac{2}{T}\int_0^T f(t)\cos\!\left(\frac{2\pi n}{T}t\right)dt, \qquad b_n = \frac{2}{T}\int_0^T f(t)\sin\!\left(\frac{2\pi n}{T}t\right)dt$$
+$$a_n = \frac{2}{T}\int_0^T f(t)\cos\left(\frac{2\pi n}{T}t\right)dt, \qquad b_n = \frac{2}{T}\int_0^T f(t)\sin\left(\frac{2\pi n}{T}t\right)dt$$
 
 S kompleksnim zapisom (Eulerjeva formula: $e^{i\theta} = \cos\theta + i\sin\theta$) to postane elegantnejše:
 
