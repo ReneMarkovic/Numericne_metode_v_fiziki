@@ -1,5 +1,27 @@
 #pragma once
 
+double f(double* casovna_vrsta, double omega1, double omega2, double x0) {
+	double t = 0;
+	for (int i = 0; i < N; i++) {
+		casovna_vrsta[i] = x0 * (sin(omega1 * t) + 0.25 * sin(omega2 * t));
+		t += DT;
+	}
+	return 0.0;
+}
+
+
+void zapisi_casovno_vrsto(double* casovno_vrsta){
+	FILE* data = NULL;
+	data = fopen("caosvna_vsta.txt", "w+");
+	double t = 0;
+	for (int i = 0; i < N; i++) {
+		fprintf(data, "%f\t%f\n", t, casovno_vrsta[i]);
+		t += DT;
+	}
+	fclose(data);
+}
+
+
 double **read_file(char *filename) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
@@ -29,7 +51,6 @@ double **read_file(char *filename) {
     return data;
 }
 
-
 int get_info(bool show){
 	if (show) {
 		printf("####################################\n");
@@ -47,25 +68,7 @@ int get_info(bool show){
 	}
 }
 
-double f(double* casovna_vrsta, double omega1, double omega2, double x0) {
-	double t = 0;
-	for (int i = 0; i < N; i++) {
-		casovna_vrsta[i] = x0 * (sin(omega1 * t) + 0.25 * sin(omega2 * t));
-		t += DT;
-	}
-	return 0.0;
-}
 
-void zapisi_casovno_vrsto(double* casovno_vrsta){
-	FILE* data = NULL;
-	fopen_s(&data, "caosvna_vsta.txt", "w+");
-	double t = 0;
-	for (int i = 0; i < N; i++) {
-		fprintf(data, "%f\t%f\n", t, casovno_vrsta[i]);
-		t += DT;
-	}
-	fclose(data);
-}
 
 double** DFT(double* casovna_vrsta) {
 	int stolpci = 2;
@@ -74,7 +77,7 @@ double** DFT(double* casovna_vrsta) {
 	FILE* data = NULL;
 	FILE* data2 = NULL;
 
-	fopen_s(&data,"DFT_power_spectrum.txt", "w+");
+	data = fopen("DFT_power_spectrum.txt", "w+");
 	//fopen_s(&data2, "DFT_matrix.txt", "w+");
 
 	matrix = (double**)malloc(N * sizeof(double*));
@@ -172,16 +175,17 @@ Drugi del vaj
 
 Complex complex_ustvari(double r, double i) {
 	/*
-	r- realni del kompleksnega �tevila
-	i- imaginarni del kompleksnega �tevila
+	r- realni del kompleksnega števila
+	i- imaginarni del kompleksnega števila
 	*/
+
 	Complex c;
 	c.real = r;
 	c.imag = i;
 	return c;
 }
 
-Complex complex_množenje(Complex a, Complex b) {
+Complex complex_mnozenje(Complex a, Complex b) {
 	Complex c;
 	c.real = a.real * b.real - a.imag * b.imag;
 	c.imag = a.real * b.imag + a.imag * b.real;
@@ -234,7 +238,7 @@ void FFT(double* casovna_vrsta, Complex* izhod, int n) {
 			s = sin(-2.0 * PI * j / n2);
 			for (k = j; k < n; k = k + n2) {
 				k1 = k + n1;
-				t = complex_množenje(izhod[k1], complex_ustvari(c, s));
+				t = complex_mnozenje(izhod[k1], complex_ustvari(c, s));
 				u = izhod[k];
 				izhod[k] = complex_add(u, t);
 				izhod[k1] = complex_sub(u, t);
@@ -242,8 +246,3 @@ void FFT(double* casovna_vrsta, Complex* izhod, int n) {
 		}
 	}
 }
-
-
-
-
-

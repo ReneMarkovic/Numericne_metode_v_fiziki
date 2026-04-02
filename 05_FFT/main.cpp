@@ -8,12 +8,13 @@
 #include <time.h> //Za merjenje trajanja dela kode, da se izvede
 
 #define T_START 0.0 //sec
-//#define T_END 101.0 //sec
-#define pp 10.0//15.0
-#define N (int)(pow(2,pp))
+#define T_END 101.0 //sec
+
+int N;
+
 #define FS 10.0 //meritev na sekundo
 //#define N (int)((T_END-T_START)*FS) //število vzorcev oz. število zapisov v časovni vrsti
-#define T_END (double)N/FS + TS
+//#define T_END (double)N/FS + TS
 #define DT 1/FS
 #define T_END 101.0 //sec
 
@@ -33,9 +34,13 @@ clock_t start, end;
 double cpu_time_dft;
 double cpu_time_fft;
 
-int main(){
+int main(int argc, char* argv[]){
+	double pp = (argc > 1) ? atof(argv[1]) : 11.0;
+	N = (int)pow(2, pp);
+
 	get_info(true);
 	double* y = (double*)malloc(N * sizeof(double));
+
 	f(y,o1,o2,x0);
 	zapisi_casovno_vrsto(y);
 
@@ -58,7 +63,7 @@ int main(){
 	printf("%d\t%d\t%f\t%f\n", (int)(pp), (int)(N), cpu_time_dft, cpu_time_fft);
 
 	FILE* file = NULL;
-	fopen_s(&file, "FFT.txt", "w+");
+	file = fopen("FFT.txt", "w+");
 	for (int i = 0; i < N; i++) {
 		double freq = (double)i / (N * DT); // Calculate the frequency
 		fprintf(file, "%f\t%f\t%f\ti%f\n", freq, complex_magnitude(izhod[i]), izhod[i].real, izhod[i].imag);
