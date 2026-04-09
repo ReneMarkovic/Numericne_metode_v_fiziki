@@ -37,7 +37,7 @@ void vaje_01() {
 	int i;
 
 	FILE* pisi;
-	fopen_s(&pisi, "vaja_01.txt", "w+");
+	pisi = fopen("vaja_01.txt", "w+");
 	//pisi=fopen("vaja_01.txt", "w+");
 	int r1;
 	double r2;
@@ -57,7 +57,7 @@ bool hit_or_miss(double x, double y,double polmer) {
 	else return false;
 }
 
-void vaje_02() {
+void vaje_02(int N) {
 	/*
 	Uporabite generator naključnih števil in določite vrednost števila pi.
 	Ustvarite graf, ki bo prikazoval, kako se natančnost izračunane vrednosti za 
@@ -67,14 +67,13 @@ void vaje_02() {
 	število pi je PI
 	*/
 	FILE* pisi;
-	fopen_s(&pisi, "Vaja_02.txt", "w+"); //visual studio verzij
+	pisi = fopen("Vaja_02.txt", "w+"); //visual studio verzij
 	//pisi = fopen("Vaja_02.txt", "w+"); //g++ verzija
 
-	int st_metov,N,i;
+	int st_metov,N,i;a
 	int Nh;
 	double x, y;
 
-	N = 1000;//Največje število vrženih točk;
 	double ocena_stevila_pi;
 	for (st_metov = 1; st_metov < N; st_metov++) {
 		Nh = 0;
@@ -89,6 +88,69 @@ void vaje_02() {
 	}
 	fclose(pisi);
 }
+
+
+vector<double> vaja_03(int N){
+	/*V tej vaji boste s pomočjo simulacije obravnavali znani problem Monty Hall.
+	V igri nastopajo tri vrata, za katerimi se skriva ena nagrada (npr. avtomobil),
+	za ostalima dvema pa ne (npr. koza). Igralec najprej naključno izbere ena vrata.
+	Voditelj nato odpre ena izmed preostalih dveh vrat, za katerimi zagotovo ni nagrade.
+	Igralec ima nato možnost, da vztraja pri prvotni izbiri ali pa zamenja vrata.
+	Vaša naloga je, da s pomočjo generatorja naključnih števil izvedete simulacijo
+	igre Monty Hall in statistično preverite uspešnost obeh strategij:
+	- strategije, pri kateri igralec ne zamenja začetne izbire,
+	- strategije, pri kateri igralec vedno zamenja izbiro po tem, ko voditelj odpre ena vrata.
+	Simulacijo izvedite za večje število ponovitev in beležite število zmag v obeh primerih. Na podlagi zbranih rezultatov izračunajte relativno verjetnost zmage za posamezno strategijo ter rezultate grafično in numerično analizirajte.
+	*/
+	int i;
+	int zmage_ostani = 0;   // strategija: ne zamenjaj vrat
+	int zmage_zamenjaj = 0; // strategija: zamenjaj vrata
+
+	FILE* pisi;
+	pisi = fopen("Vaja_03.txt", "w+");
+
+	for (i = 1; i <= N; i++) {
+		// Nagradno vrata (0, 1 ali 2)
+		int nagrada = rand_int_ab(0, 2);
+
+		// Igralec izbere vrata
+		int izbira = rand_int_ab(0, 2);
+
+		// Voditelj odpre ena vrata (ne izbira, ne nagrada)
+		int voditelj;
+		do {
+			voditelj = rand_int_ab(0, 2);
+		} while (voditelj == izbira || voditelj == nagrada);
+
+		// Strategija 1: ostani pri prvotni izbiri
+		if (izbira == nagrada) zmage_ostani++;
+
+		// Strategija 2: zamenjaj na preostala vrata
+		int zamenjava;
+		do {
+			zamenjava = rand_int_ab(0, 2);
+		} while (zamenjava == izbira || zamenjava == voditelj);
+
+		if (zamenjava == nagrada) zmage_zamenjaj++;
+
+		// Zapisi v datoteko: st_iger, p_ostani, p_zamenjaj
+		double p_ostani = (double)zmage_ostani / (double)i;
+		double p_zamenjaj = (double)zmage_zamenjaj / (double)i;
+		fprintf(pisi, "%d\t%f\t%f\n", i, p_ostani, p_zamenjaj);
+	}
+	fclose(pisi);
+
+	double p_ostani_final = (double)zmage_ostani / (double)N;
+	double p_zamenjaj_final = (double)zmage_zamenjaj / (double)N;
+
+	printf("Monty Hall simulacija (%d iger):\n", N);
+	printf("  Strategija OSTANI:   P = %.4f (teorija: 1/3 = 0.3333)\n", p_ostani_final);
+	printf("  Strategija ZAMENJAJ: P = %.4f (teorija: 2/3 = 0.6667)\n", p_zamenjaj_final);
+
+	vector<double> rezultat = {p_ostani_final, p_zamenjaj_final};
+	return rezultat;
+}
+
 
 vector<int> sortiraj(vector<int>& x) {
 	int n = x.size();

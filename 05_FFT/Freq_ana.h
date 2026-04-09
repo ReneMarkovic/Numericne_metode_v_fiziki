@@ -21,7 +21,6 @@ void zapisi_casovno_vrsto(double* casovno_vrsta){
 	fclose(data);
 }
 
-
 double **read_file(char *filename) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
