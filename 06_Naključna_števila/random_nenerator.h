@@ -152,6 +152,27 @@ vector<double> vaja_03(int N){
 }
 
 /*Vaja 4*/
+vector<int> sortiraj(vector<int>& x) {
+	int n = x.size();
+	int i, j, i_min, l;
+	int min_value = 100000;
+
+	for (i = 0; i < n; i++) {
+		min_value = 100000;
+
+		for (j = i; j < n; j++) {
+			if (x[j] < min_value) {
+				min_value = x[j];
+				i_min = j;
+			}
+		}
+
+		l = x[i];
+		x[i] = min_value;
+		x[i_min] = l;
+	}
+	return x;
+}
 
 vector<int> loto_generator() {
 	vector<int> stevila(7); //Listek od uporabnika
@@ -176,28 +197,6 @@ vector<int> loto_generator() {
 	//izpisi(stevila);
 	sortiraj(stevila);
 	return stevila;
-}
-
-vector<int> sortiraj(vector<int>& x) {
-	int n = x.size();
-	int i, j, i_min, l;
-	int min_value = 100000;
-
-	for (i = 0; i < n; i++) {
-		min_value = 100000;
-
-		for (j = i; j < n; j++) {
-			if (x[j] < min_value) {
-				min_value = x[j];
-				i_min = j;
-			}
-		}
-
-		l = x[i];
-		x[i] = min_value;
-		x[i_min] = l;
-	}
-	return x;
 }
 
 void izpisi_listek(vector<int> x) {
