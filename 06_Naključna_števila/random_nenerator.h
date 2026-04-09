@@ -5,7 +5,7 @@ int rand_int_ab(int a, int b) {
 	Ta funkcija generira naključno naravno število
 	znotraj intervala a in b (vključno z a in b)
 	*/
-	int r = rand()%(b+1); //r zavzema vrednosti med 0 in 32767;
+	int r = rand() % (b - a + 1) + a;
 	return r;
 }
 
@@ -72,7 +72,7 @@ void vaje_02(int N) {
 	pisi = fopen("Vaja_02.txt", "w+"); //visual studio verzij
 	//pisi = fopen("Vaja_02.txt", "w+"); //g++ verzija
 
-	int st_metov,N,i;a
+	int st_metov, i;
 	int Nh;
 	double x, y;
 
@@ -216,7 +216,7 @@ void izpisi_rezultat(vector<int> x) {
 		printf("%d enakih stevil se pojavi %d-krat.\n", i, x[i]);
 	}
 }
-s
+
 void igra_loto() {
 	//vector<int> stevila(7); //Listek od uporabnika
 	vector<int> zrebanje;
@@ -224,7 +224,7 @@ void igra_loto() {
 
 	stevila=loto_generator();
 
-	izpisi(stevila);
+	izpisi_listek(stevila);
 	int igra, nc,i,j;
 
 	vector<int> rezultati(8);
@@ -245,5 +245,5 @@ void igra_loto() {
 		}
 		rezultati[nc] += 1;
 	}
-	izpisi_v2(rezultati);
+	izpisi_rezultat(rezultati);
 }

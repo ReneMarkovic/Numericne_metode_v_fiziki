@@ -24,10 +24,14 @@ int main(){
     printf("\n");
 
     printf("Izvajam vajo 2\n");
-    vaje_02();
+    vaje_02(sample_size);
     printf("\n");
 
     printf("Izvajam vajo 3\n");
+    vaja_03(sample_size);
+    printf("\n");
+
+    printf("Izvajam vajo 4\n");
     igra_loto();
     printf("\n");
     printf("Program je uspešno zaključil");
