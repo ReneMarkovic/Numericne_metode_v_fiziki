@@ -51,6 +51,8 @@ void vaje_01() {
 	fclose(pisi);
 }
 
+/*Vaja 2*/
+
 bool hit_or_miss(double x, double y,double polmer) {
 	double d = sqrt(x * x + y * y);//Razdalja od izhodišča koordinatnega sistema do točke(x,y)
 	if (d < polmer) return true;
@@ -89,6 +91,7 @@ void vaje_02(int N) {
 	fclose(pisi);
 }
 
+/*Vaja 3*/
 
 vector<double> vaja_03(int N){
 	/*V tej vaji boste s pomočjo simulacije obravnavali znani problem Monty Hall.
@@ -109,12 +112,9 @@ vector<double> vaja_03(int N){
 	FILE* pisi;
 	pisi = fopen("Vaja_03.txt", "w+");
 
-	for (i = 1; i <= N; i++) {
-		// Nagradno vrata (0, 1 ali 2)
-		int nagrada = rand_int_ab(0, 2);
-
-		// Igralec izbere vrata
-		int izbira = rand_int_ab(0, 2);
+	for (i = 0; i < N; i++) {
+		int nagrada = rand_int_ab(0, 2); // Nagradno vrata (0, 1 ali 2)
+		int izbira = rand_int_ab(0, 2); // Igralec izbere vrata
 
 		// Voditelj odpre ena vrata (ne izbira, ne nagrada)
 		int voditelj;
@@ -144,52 +144,14 @@ vector<double> vaja_03(int N){
 	double p_zamenjaj_final = (double)zmage_zamenjaj / (double)N;
 
 	printf("Monty Hall simulacija (%d iger):\n", N);
-	printf("  Strategija OSTANI:   P = %.4f (teorija: 1/3 = 0.3333)\n", p_ostani_final);
-	printf("  Strategija ZAMENJAJ: P = %.4f (teorija: 2/3 = 0.6667)\n", p_zamenjaj_final);
+	printf("  Strategija OSTANI:   P = %.4f (teorija: 1/3)\n", p_ostani_final);
+	printf("  Strategija ZAMENJAJ: P = %.4f (teorija: 2/3)\n", p_zamenjaj_final);
 
 	vector<double> rezultat = {p_ostani_final, p_zamenjaj_final};
 	return rezultat;
 }
 
-
-vector<int> sortiraj(vector<int>& x) {
-	int n = x.size();
-	int i, j, i_min, l;
-	int min_value = 100000;
-
-	for (i = 0; i < n; i++) {
-		min_value = 100000;
-
-		for (j = i; j < n; j++) {
-			if (x[j] < min_value) {
-				min_value = x[j];
-				i_min = j;
-			}
-		}
-
-		l = x[i];
-		x[i] = min_value;
-		x[i_min] = l;
-	}
-	return x;
-}
-
-void izpisi(vector<int> x) {
-	int n = x.size(),i;
-	printf("Kominacija: ");
-	for (i = 0; i < n; i++) {
-		printf("%d ", x[i]);
-	}
-	printf("\n");
-}
-
-void izpisi_v2(vector<int> x) {
-	int n = x.size();
-	int i;
-	for (i = 0; i < n; i++) {
-		printf("%d enakih stevil se pojavi %d-krat.\n", i, x[i]);
-	}
-}
+/*Vaja 4*/
 
 vector<int> loto_generator() {
 	vector<int> stevila(7); //Listek od uporabnika
@@ -216,6 +178,45 @@ vector<int> loto_generator() {
 	return stevila;
 }
 
+vector<int> sortiraj(vector<int>& x) {
+	int n = x.size();
+	int i, j, i_min, l;
+	int min_value = 100000;
+
+	for (i = 0; i < n; i++) {
+		min_value = 100000;
+
+		for (j = i; j < n; j++) {
+			if (x[j] < min_value) {
+				min_value = x[j];
+				i_min = j;
+			}
+		}
+
+		l = x[i];
+		x[i] = min_value;
+		x[i_min] = l;
+	}
+	return x;
+}
+
+void izpisi_listek(vector<int> x) {
+	int n = x.size(),i;
+	printf("Kominacija: ");
+	for (i = 0; i < n; i++) {
+		printf("%d ", x[i]);
+	}
+	printf("\n");
+}
+
+void izpisi_rezultat(vector<int> x) {
+	int n = x.size();
+	int i;
+	for (i = 0; i < n; i++) {
+		printf("%d enakih stevil se pojavi %d-krat.\n", i, x[i]);
+	}
+}
+s
 void igra_loto() {
 	//vector<int> stevila(7); //Listek od uporabnika
 	vector<int> zrebanje;
