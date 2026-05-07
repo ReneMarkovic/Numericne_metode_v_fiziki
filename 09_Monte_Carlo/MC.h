@@ -55,7 +55,7 @@ double randd() {
 }
 
 int randint() {
-	return (int)(N * (double)(rand()) / ((double)(RAND_MAX)));
+	return rand()%N;
 }
 
 void MC_simulator(double xyz[N][3], double E_old, double Wv[N]) {
