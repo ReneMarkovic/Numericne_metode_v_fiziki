@@ -50,8 +50,8 @@ double energija(double xyz[N][3], double* Wv) {
 	return E;//<povprečno vezavno energijo na delec>
 }
 
-double randd() {
-	return (double)(rand()) / ((double)(RAND_MAX)) - 0.5;
+double randd(double delta) {
+	return ((double)(rand()) / ((double)(RAND_MAX)) - 0.5)*2*delta;
 }
 
 int randint() {
