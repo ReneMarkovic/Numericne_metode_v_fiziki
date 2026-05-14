@@ -1,144 +1,156 @@
 #pragma warning (disable : 4996)
-void zacetna_postavitev(double xyz[N][3]) {
-	int ix, iy,iz;
-	int in = 0;
-	double da = a / (double)(Nx - 1);
-	FILE* pisi = fopen("00_zacetna_konfiguracija.dat", "w+");
-	for (ix = 0; ix < Nx; ix++) {
-		for (iy = 0; iy < Ny; iy++) {
-			for (iz = 0; iz < Nz; iz++) {
-				xyz[in][2] = iz * da;//y lega
-				xyz[in][1] = iy * da;//y lega
-				xyz[in][0] = ix * da;//x lega
-				fprintf(pisi, "%f\t%f\t%f\n", xyz[in][0], xyz[in][1], xyz[in][2]);
-				in++;
-			}
+#pragma once
+
+void inicializacija_leg(double lege[N][D]){
+	int ix, iy;
+	FILE*pisi;
+
+	//fopen_s(&pisi,"init_lege.dat","w+");
+
+	pisi = fopen("init_lege.dat","w+");
+
+	int count = 0;
+
+	for(ix = 0; ix < Nx; ix++){
+		for(iy = 0; iy < Ny; iy++){
+			lege[count][0] = ix*a;
+			lege[count][1] = iy*a;
+			fprintf(pisi,"%f\t%f\n",lege[count][0],lege[count][1]);
+			count++;
 		}
 	}
 	fclose(pisi);
 }
 
-double energija(double xyz[N][3], double* Wv) {
-	double E = 0.0;
+double energija_sistema(double xyz[N][D], double* Wv){
+	double E = 0;
 	double En;
-	double r, dx, dy,dz;
-	int n1, n2;
-	for (n1 = 0; n1 < N; n1++) {
-		Wv[n1] = 0.0;
-		En=0.0;
-		for (n2 = n1 + 1; n2 < N; n2++) {
-			dx = lega[n1][0] - lega[n2][0];
-			dy = lega[n1][1] - lega[n2][1];
-			dz = lega[n1][2] - lega[n2][2];
+	int i,j;
+	double r,dx,dy,dz;
 
-			if (dx > a) dx -= a;
-			if (dx < -a ) dx += a;
-			if (dy > a ) dy -= a;
-			if (dy < -a ) dy += a;
-			if (dz > a) dz -= a;
-			if (dz < -a) dz += a;
+	for(i = 0; i < N; i++){
+		Wv[i] = 0;
+	}
 
-			r = dx * dx + dy * dy+ dz * dz;
-			En = pow(r, -6.0) - pow(r, -3.0);
-			E +=En;
-			Wv[n1]+=En;
-			Wv[n2]+=En;
-			//printf("%f\n", E);
+	double temp_x, temp_y;
+
+	for(i = 0; i < N; i++){
+		En = 0;
+		for(j = i + 1; j < N; j++){
+			dx = (xyz[j][0] - xyz[i][0]);
+
+			if(dx > L/2){
+				temp_x = xyz[j][0];
+				temp_x -= L;
+				dx = (temp_x - xyz[i][0]);
+			}
+
+			if(dx < -L/2){
+				temp_x = xyz[j][0];
+				temp_x += L;
+				dx = (temp_x - xyz[i][0]);
+			}
+			dx = dx*dx;
+
+			dy = (xyz[j][1] - xyz[i][1]);
+
+			if(dy > L/2){
+				temp_y = xyz[j][1];
+				temp_y -= L;
+				dy = (temp_y - xyz[i][1]);
+			}
+
+			if(dy < -L/2){
+				temp_y = xyz[j][1];
+				temp_y += L;
+				dy = (temp_y - xyz[i][1]);
+			}
+			dy = dy*dy;
+			r = dy + dx;
+
+			En = pow(r,-6.0)-pow(r,-3.0);
+			
+			E += 2.0*En;
+			Wv[i] += En;
+			Wv[j] += En; 
+
 		}
 	}
-	E = 2.0 * E;
-	return E;//<povprečno vezavno energijo na delec>
+	return E;
 }
 
-double randd(double delta) {
-	return ((double)(rand()) / ((double)(RAND_MAX)) - 0.5)*2*delta;
-}
-
-int randint() {
+int rand_int(){
 	return rand()%N;
 }
 
-void MC_simulator(double xyz[N][3], double E_old, double Wv[N]) {
-	zacetna_postavitev(xyz);
 
-	//Izberemo nakljucen delec
-	int izbrani;
-	int st_simulacij = 0;
+
+
+
+// Posodobljena funkcija za premikanje delcev v okolivi delta
+double rand_double(double delta){ 
+	double r = (double)(rand());
+	r = r / ((double)(RAND_MAX));
+	r = r - 0.5;
+	r = r * 2.0 * delta;
+	return r;
+}
+
+
+
+
+
+double randd(){
+	return (double)(rand()) / ((double)(RAND_MAX));
+}
+
+// * MC_bias
+double MC_simulator(double lega[N][D], double* E_old, double* Wv, double* MC_bias){ 
+
+	int izbran_delec;
+	int iteracija = 0;
 	double E_new, dE;
-	int MC = 0, ani_id = 0;
-	int ix, iy, iz, in;
-	FILE* pisi = fopen("02_E_T0_1.dat", "w+");
-	FILE* ani;
-	char ss[40];
-	while (st_simulacij < STOP) {
-		izbrani = randint();// rand() % N;
-		//printf("izbran delec %d [0,%d)\n", izbrani,N);
-		double x_i, y_i,z_i;//Za izbran delec si shranimo x in y koordinato
-		x_i = xyz[izbrani][0];
-		y_i = xyz[izbrani][1];
-		z_i = xyz[izbrani][2];
+	int MC = 0;
+	int ani_id = 0;
+	int ix,iy,iz;
 
-		double da = a / (double)(Nx - 1);//Delec premaknemo
-		double dr = 0.5 * da / 2;
-		xyz[izbrani][0] += dr * randd();
-		xyz[izbrani][1] += dr * randd();
-		xyz[izbrani][2] += dr * randd();
+	double xi,yi,zi;
+	double bias;
+	while(iteracija < STOP){
+		izbran_delec = rand_int();
 
-		if (xyz[izbrani][0] > a) xyz[izbrani][0] -= a;
-		if (xyz[izbrani][0] < 0) xyz[izbrani][0] += a;
-		if (xyz[izbrani][1] > a) xyz[izbrani][1] -= a;
-		if (xyz[izbrani][1] < 0) xyz[izbrani][1] += a;
-		if (xyz[izbrani][2] > a) xyz[izbrani][2] -= a;
-		if (xyz[izbrani][2] < 0) xyz[izbrani][2] += a;
+		xi = lega[izbran_delec][0];
+		yi = lega[izbran_delec][1];
 
-		E_new = energija(lega,Wv);
-		dE = E_new - E_old;
+		lega[izbran_delec][0] += rand_double(a);
+		lega[izbran_delec][1] += rand_double(a);
 
-		if (dE < 0) {
-			E_old = E_new;
-			MC += 1; //Sprejmem
-		}
-		else {
-			if (exp(-dE / T) > (randd() + 0.5)) {
-				E_old = E_new;
-				MC += 1; //Sprejmem
-			}
-			else {//Zavržem
-				xyz[izbrani][0] = x_i;
-				xyz[izbrani][1] = y_i;
-				xyz[izbrani][2] = z_i;
+		if (lega[izbran_delec][0]>L) lega[izbran_delec][0] -= L;
+		if (lega[izbran_delec][0]<0) lega[izbran_delec][0] += L;
+		if (lega[izbran_delec][1]>L) lega[izbran_delec][1] -= L;
+		if (lega[izbran_delec][1]<0) lega[izbran_delec][1] += L;
+
+		E_new = energija_sistema(lega, Wv);
+
+		dE = E_new - *E_old; // * E_old
+
+		if(dE<0){
+			*E_old = E_new; // * E_old 
+			MC += 1;
+		}else{
+			if(exp(-dE/T) > randd()){
+				*E_old = E_new; // * E_old 
+				MC += 1;
+			}else{
+				lega[izbran_delec][0] = xi;
+				lega[izbran_delec][1] = yi;
 			}
 		}
-		if ((st_simulacij % 100 == 0)) {	
-			printf("<E>/N = %.2f\tMC=%d\ti=%.3f\r", E_old / ((double)N - 1), MC, (double)st_simulacij/((double)STOP));
-			fflush(stdout);
-			sprintf(ss, "data\\ani_%05d.dat", ani_id);
-
-			ani = fopen(ss, "w+");
-			in = 0;
-			for (in = 0; in < N-1; in++) {
-					fprintf(ani, "%f\t%f\t%f\t%f\n", xyz[in][0], xyz[in][1], xyz[in][2],Wv[in]);
-			}
-			fclose(pisi);
-			ani_id += 1;
-		}
-		st_simulacij += 1;
-		if (st_simulacij > int(EIN * STOP)) {
-			fprintf(pisi, "%d\t%d\t%f\n", st_simulacij, MC, E_old / ((double)N - 1));
-		}
+		iteracija += 1;
+		bias = (double)(MC) / (double)(iteracija);
+		printf("MC bias = %f\n",bias);
+		
+		*MC_bias = bias; // * MC_bias
 	}
-	fclose(pisi);
-
-
-	in = 0;
-	pisi = fopen("01_koncna_konfiguracija.dat", "w+");
-	for (ix = 0; ix < Nx; ix++) {
-		for (iy = 0; iy < Ny; iy++) {
-			for (iz = 0; iz < Nz; iz++) {
-				fprintf(pisi, "%f\t%f\t%f\n", xyz[in][0], xyz[in][1], xyz[in][2]);
-				in++;
-			}
-		}
-	}
-	fclose(pisi);
+	return *E_old; // * E_old 
 }
