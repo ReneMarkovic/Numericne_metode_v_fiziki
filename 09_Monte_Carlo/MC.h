@@ -104,6 +104,80 @@ double update_delta(double delta, double bias){
 	return delta;
 }
 
+
+void shrani_lege(double lege[N][D]){
+	FILE*pisi;
+	pisi = fopen("fin_lege.dat","w+");
+
+	int count = 0, ix, iy;
+
+	for(ix = 0; ix < Nx; ix++){
+		for(iy = 0; iy < Ny; iy++){
+			fprintf(pisi,"%f\t%f\n",lege[count][0],lege[count][1]);
+			count++;
+		}
+	}
+	fclose(pisi);
+}
+
+double razdalja_ij(double lege[N][D], int i, int j){
+    double dx = lege[i][0] - lege[j][0];
+    double dy = lege[i][1] - lege[j][1];
+
+    if(dx >  L/2.0) dx -= L;
+    if(dx < -L/2.0) dx += L;
+    if(dy >  L/2.0) dy -= L;
+    if(dy < -L/2.0) dy += L;
+
+    return sqrt(dx*dx + dy*dy);
+}
+
+void gr(double lege[N][D]){
+	int i,j;
+	double r1 = 0.0;
+	double rmax = 7.0;
+	double r;
+	double nr;
+	double dr = rmax/((double)(n_bins));
+	int ir;
+
+	double histogram[n_bins] = {0.0};
+
+	for(i = 0; i < N; i++){
+		ir = 0;
+		r1 = 0.0;
+		while(r1 < rmax){
+			nr = 0.0;
+			for(j = 0; j < N; j++){
+				if(j!=i){
+					r = razdalja_ij(lege, i, j);
+					r = r - r1;
+					
+					//printf("i = %d, j = %d, r = %f",i,j,r);
+
+					if(r > 0 && r < dr){
+						nr+=1.0;
+					}
+				}
+			}
+
+			//nr = nr/(PI*((r1+dr)*(r1+dr)-r1*r1));
+			
+			//printf("r1 = %f\t nr %f\n",r1,nr);
+			
+			histogram[ir] += nr;
+			r1 += dr;
+			ir++;
+		}
+	}
+
+	for(i = 0; i < n_bins; i++){
+		histogram[ir] = histogram[ir]/((double)(N));
+		printf("r (%.2f,%.2f), g(r) = %.2f\n",(double)(i)*dr,(double)(i+1)*dr,histogram[ir]);
+	}
+}
+
+
 // * MC_bias
 double MC_simulator(double lega[N][D], double* E_old, double* Wv, double* MC_bias){ 
 
@@ -121,6 +195,9 @@ double MC_simulator(double lega[N][D], double* E_old, double* Wv, double* MC_bia
 	double bias;
 
 	double delta = a;
+
+
+	gr(lega);
 
 	while(iteracija < STOP){
 		izbran_delec = rand_int();
@@ -171,6 +248,10 @@ double MC_simulator(double lega[N][D], double* E_old, double* Wv, double* MC_bia
 		
 		*MC_bias = bias; // * MC_bias
 	}
+
 	fclose(pisi);
+	shrani_lege(lega);
+	gr(lega);
+
 	return *E_old; // * E_old 
 }
