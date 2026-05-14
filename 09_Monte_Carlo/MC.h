@@ -1,4 +1,3 @@
-#pragma warning (disable : 4996)
 #pragma once
 
 void inicializacija_leg(double lege[N][D]){
@@ -84,9 +83,6 @@ int rand_int(){
 }
 
 
-
-
-
 // Posodobljena funkcija za premikanje delcev v okolivi delta
 double rand_double(double delta){ 
 	double r = (double)(rand());
@@ -97,15 +93,22 @@ double rand_double(double delta){
 }
 
 
-
-
-
 double randd(){
 	return (double)(rand()) / ((double)(RAND_MAX));
 }
 
+
+double update_delta(double delta, double bias){
+	if(bias<0.45)	delta *= 0.99;
+	if(bias>0.55)	delta *= 1.03;
+	return delta;
+}
+
 // * MC_bias
 double MC_simulator(double lega[N][D], double* E_old, double* Wv, double* MC_bias){ 
+
+	FILE*pisi;
+	pisi = fopen("rezutati.dat","w+");
 
 	int izbran_delec;
 	int iteracija = 0;
@@ -116,14 +119,17 @@ double MC_simulator(double lega[N][D], double* E_old, double* Wv, double* MC_bia
 
 	double xi,yi,zi;
 	double bias;
+
+	double delta = a;
+
 	while(iteracija < STOP){
 		izbran_delec = rand_int();
 
 		xi = lega[izbran_delec][0];
 		yi = lega[izbran_delec][1];
 
-		lega[izbran_delec][0] += rand_double(a);
-		lega[izbran_delec][1] += rand_double(a);
+		lega[izbran_delec][0] += rand_double(delta);
+		lega[izbran_delec][1] += rand_double(delta);
 
 		if (lega[izbran_delec][0]>L) lega[izbran_delec][0] -= L;
 		if (lega[izbran_delec][0]<0) lega[izbran_delec][0] += L;
@@ -148,9 +154,23 @@ double MC_simulator(double lega[N][D], double* E_old, double* Wv, double* MC_bia
 		}
 		iteracija += 1;
 		bias = (double)(MC) / (double)(iteracija);
-		printf("MC bias = %f\n",bias);
+
+		delta = update_delta(delta,bias);
+
+		if(iteracija%N == 0){
+			printf("i  = %d\t <E>/N = %.2f\t bias = %.2f %%\t delta = %.3f\n",iteracija,*E_old,bias*100,delta);
+			//printf("MC bias = %f\n",bias);
+		}
+
+		if(iteracija > EIN){
+			fprintf(pisi,"%d\t",iteracija);
+			fprintf(pisi,"%f\t",*E_old);
+			fprintf(pisi,"%f\t",bias);
+			fprintf(pisi,"%f\n",delta);
+		}
 		
 		*MC_bias = bias; // * MC_bias
 	}
+	fclose(pisi);
 	return *E_old; // * E_old 
 }
