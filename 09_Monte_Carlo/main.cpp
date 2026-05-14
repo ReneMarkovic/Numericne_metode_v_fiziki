@@ -1,58 +1,86 @@
-// Monte_Carlo.cpp : This file contains the 'main' function. Program execution begins and ends there.
+// 09_MC.cpp : Defines the entry point for the console application.
 //
 
+#include "stdafx.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <stdio.h>
-#pragma warning (disable:4996) //fopen
+#include <time.h>
 
 
-#define EIN 0.7
-#define Nx (int)(4)
-#define Ny (int)(4)
-#define Nz (int)(4)
-#define N Nx*Ny*Nz
+#define SEME 42
 
-#define STOP 1000*N
+#define RHO 0.3
+#define Nx 9
+#define Ny 9
+#define N Nx*Ny
+#define a sqrt(1.0/RHO)
+#define L Nx*a
+#define D 2
+#define STOP 10*N 
 
-//#define T 0.001 // T okoli 1 je sobna temperatura
-#define RHO 0.1
 
-double a = pow(N / RHO,1.0/3.0); //Dolzina stranice kvadrata
+double T = 10.0;
 
-double lega[N][3];
+double lega[N][D];
 double Wv[N];
-double T;
+
+
 #include "MC.h"
 
-double E_old;
+
+/*
+
+Kaj še moramo narediti
+
+	(1) Ročno nastaljanje temeprature.
+	(2) Kontroni zapis na koncu simulacije v terminalu.
+	(3) Regulacija pristranskosti (bias ~ 0.5).
+	(4) Zapis <E>/N v odvisnosti od iteracije, Acceptance ratio in delta.
+	(5) Zapisosovanje leg posameznih delcev v teku simulaije.
+	(6) Radialno porazdelitvena funkcija (g(r)) in sproten zapis vrednosti. 
+	(7) Vizualizacija
+		- Distribucja energija
+		- Začetna in končna lega
+		- g(r)
+		- 3D ?
 
 
-int main(int argc, char* argv[]){
-	if (argc > 1){
+	
+
+
+*/
+
+
+
+int main(int argc, char* argv[]){ //Dodana sta argc in argv
+
+	//Prebiranje vnosa
+	if(argc>1){
 		sscanf(argv[1], "%lf", &T);
 	}else{
-		T=0.01;
+		T = 0.0;
 	}
-	FILE*pisi_2=fopen("info.dat","w+");
-	fprintf(pisi_2,"%d\n",N);
-	fprintf(pisi_2,"%f",T);
-	fclose(pisi_2);
-	
-	zacetna_postavitev(lega);
-	
-	int in=0,ix,iy;
-	FILE* pisi = fopen("00_zacetna_konfiguracija.dat", "w+");
-	for (ix = 0; ix < Nx; ix++) {
-		for (iy = 0; iy < Ny; iy++) {
-			fprintf(pisi, "%f\t%f\t%f\n", lega[in][0], lega[in][1], lega[in][2]);
-			in++;
-		}
-	}
-	fclose(pisi);
 
-	E_old = energija(lega,Wv);
-	MC_simulator(lega, E_old,Wv);
+	srand(SEME);
+	double E_old = 0.0;
+	double MC_bias = 0.0; //Dodana je spremenljivka MC_bias
 
+	inicializacija_leg(lega);
+	E_old = energija_sistema(lega, Wv);
+	printf("E_old = %f\n",E_old);
+	MC_simulator(lega, &E_old,  Wv, &MC_bias); // Dana sta kazalnika za &E_old in &MC_bias
+
+
+	//Posodobljen izpis
+	printf("Povzetek simulacije: \n");
+	printf(" - N = %d\n",N);
+	printf(" - Rho = %.3f\n",RHO);
+	printf(" - T = %.3f\n",T);
+	printf(" - <E>/N = %.3f\n", E_old);
+	printf(" - Acceptance ratio = %.3f %% \n",MC_bias*100);
+
+
+	getchar();
 	return 0;
 }
