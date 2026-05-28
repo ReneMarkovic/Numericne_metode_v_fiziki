@@ -1,7 +1,7 @@
 // 09_MC.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
+// #include "stdafx.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -9,16 +9,17 @@
 
 
 #define SEME 42
+#define n_bins 71
 
 #define RHO 0.3
-#define Nx 9
-#define Ny 9
+#define Nx 40
+#define Ny 40
 #define N Nx*Ny
 #define a sqrt(1.0/RHO)
 #define L Nx*a
 #define D 2
-#define STOP 10*N 
-
+#define STOP 100*N 
+#define EIN 0.7*STOP
 
 double T = 10.0;
 
@@ -54,12 +55,11 @@ Kaj še moramo narediti
 
 
 int main(int argc, char* argv[]){ //Dodana sta argc in argv
-
 	//Prebiranje vnosa
 	if(argc>1){
 		sscanf(argv[1], "%lf", &T);
 	}else{
-		T = 0.0;
+		T = 0.001;
 	}
 
 	srand(SEME);
@@ -77,7 +77,7 @@ int main(int argc, char* argv[]){ //Dodana sta argc in argv
 	printf(" - N = %d\n",N);
 	printf(" - Rho = %.3f\n",RHO);
 	printf(" - T = %.3f\n",T);
-	printf(" - <E>/N = %.3f\n", E_old);
+	printf(" - <E>/N = %.3f\n", E_old/(double)(N));
 	printf(" - Acceptance ratio = %.3f %% \n",MC_bias*100);
 
 

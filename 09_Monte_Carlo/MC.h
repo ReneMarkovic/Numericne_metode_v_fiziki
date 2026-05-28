@@ -1,12 +1,17 @@
 #pragma once
 
+void T_to_str(char* buf){
+	int k;
+	sprintf(buf, "%.3f", T);
+	for(k=0; buf[k]; k++) if(buf[k]=='.') buf[k]='_';
+}
+
 void inicializacija_leg(double lege[N][D]){
 	int ix, iy;
 	FILE*pisi;
-
-	//fopen_s(&pisi,"init_lege.dat","w+");
-
-	pisi = fopen("init_lege.dat","w+");
+	char fname[64]; char tstr[32]; T_to_str(tstr);
+	sprintf(fname, "pos_init_%s.dat", tstr);
+	pisi = fopen(fname,"w+");
 
 	int count = 0;
 
@@ -67,7 +72,8 @@ double energija_sistema(double xyz[N][D], double* Wv){
 			dy = dy*dy;
 			r = dy + dx;
 
-			En = pow(r,-6.0)-pow(r,-3.0);
+			double r3i = 1.0/(r*r*r);
+			En = r3i*r3i - r3i;
 			
 			E += 2.0*En;
 			Wv[i] += En;
@@ -99,15 +105,17 @@ double randd(){
 
 
 double update_delta(double delta, double bias){
-	if(bias<0.45)	delta *= 0.99;
-	if(bias>0.55)	delta *= 1.03;
+	if(bias<0.45)	delta *= 0.993;
+	if(bias>0.55)	delta *= 1.003;
 	return delta;
 }
 
 
 void shrani_lege(double lege[N][D]){
 	FILE*pisi;
-	pisi = fopen("fin_lege.dat","w+");
+	char fname[64]; char tstr[32]; T_to_str(tstr);
+	sprintf(fname, "pos_final_%s.dat", tstr);
+	pisi = fopen(fname,"w+");
 
 	int count = 0, ix, iy;
 
@@ -132,48 +140,58 @@ double razdalja_ij(double lege[N][D], int i, int j){
     return sqrt(dx*dx + dy*dy);
 }
 
-void gr(double lege[N][D]){
-	int i,j;
-	double r1 = 0.0;
-	double rmax = 7.0;
-	double r;
-	double nr;
-	double dr = rmax/((double)(n_bins));
-	int ir;
+double energija_delca(double xyz[N][D], int k){
+	double E = 0.0;
+	double dx, dy, r, r3i;
 
-	double histogram[n_bins] = {0.0};
+	for(int j = 0; j < N; j++){
+		if(j == k) continue;
+
+		dx = xyz[j][0] - xyz[k][0];
+		if(dx >  L/2.0) dx -= L;
+		if(dx < -L/2.0) dx += L;
+
+		dy = xyz[j][1] - xyz[k][1];
+		if(dy >  L/2.0) dy -= L;
+		if(dy < -L/2.0) dy += L;
+
+		r = dx*dx + dy*dy;
+		r3i = 1.0/(r*r*r);
+		E += r3i*r3i - r3i;
+	}
+	return E;
+}
+
+void gr(double lege[N][D], double* histogram, int n_configs, bool write){
+	int i, j, ir;
+	double r;
+	const double rmax = 7.0;
+	const double dr = 0.2;
+	const double rho = (double)(N) / (L*L);
 
 	for(i = 0; i < N; i++){
-		ir = 0;
-		r1 = 0.0;
-		while(r1 < rmax){
-			nr = 0.0;
-			for(j = 0; j < N; j++){
-				if(j!=i){
-					r = razdalja_ij(lege, i, j);
-					r = r - r1;
-					
-					//printf("i = %d, j = %d, r = %f",i,j,r);
-
-					if(r > 0 && r < dr){
-						nr+=1.0;
-					}
-				}
-			}
-
-			//nr = nr/(PI*((r1+dr)*(r1+dr)-r1*r1));
-			
-			//printf("r1 = %f\t nr %f\n",r1,nr);
-			
-			histogram[ir] += nr;
-			r1 += dr;
-			ir++;
+		for(j = 0; j < N; j++){
+			if(j == i) continue;
+			r = razdalja_ij(lege, i, j);
+			ir = (int)(r / dr);
+			if(ir < n_bins) histogram[ir] += 1.0;
 		}
 	}
 
-	for(i = 0; i < n_bins; i++){
-		histogram[ir] = histogram[ir]/((double)(N));
-		printf("r (%.2f,%.2f), g(r) = %.2f\n",(double)(i)*dr,(double)(i+1)*dr,histogram[ir]);
+	if(write){
+		FILE* pisi;
+		char fname[64]; char tstr[32]; T_to_str(tstr);
+		sprintf(fname, "gr_%s.txt", tstr);
+		pisi = fopen(fname, "w+");
+		for(i = 0; i < n_bins; i++){
+			double r1 = i * dr;
+			double shell_area = 3.14159265358979 * ((r1+dr)*(r1+dr) - r1*r1);
+			double g = histogram[i] / ((double)(n_configs) * (double)(N) * rho * shell_area);
+			fprintf(pisi, "%.3f\t%.6f\n", r1 + 0.5*dr, g);
+			printf("r = %.3f\tg(r) = %.3f\n",r1,g);
+		}
+		printf("Shranjeno v datoteko %s\n",fname);
+		fclose(pisi);
 	}
 }
 
@@ -182,28 +200,29 @@ void gr(double lege[N][D]){
 double MC_simulator(double lega[N][D], double* E_old, double* Wv, double* MC_bias){ 
 
 	FILE*pisi;
-	pisi = fopen("rezutati.dat","w+");
-
+	char fname[64]; char tstr[32]; T_to_str(tstr);
+	sprintf(fname, "energije_%s.dat", tstr);
+	pisi = fopen(fname,"w+");
+	double histogram[n_bins] = {0.0};
+	int n_configs = 0;
 	int izbran_delec;
 	int iteracija = 0;
-	double E_new, dE;
+	double dE, E_old_k, E_new_k;
 	int MC = 0;
-	int ani_id = 0;
-	int ix,iy,iz;
 
-	double xi,yi,zi;
+	double xi, yi;
 	double bias;
 
 	double delta = a;
 
-
-	gr(lega);
-
+	int rec = 0;
 	while(iteracija < STOP){
 		izbran_delec = rand_int();
 
 		xi = lega[izbran_delec][0];
 		yi = lega[izbran_delec][1];
+
+		E_old_k = energija_delca(lega, izbran_delec);
 
 		lega[izbran_delec][0] += rand_double(delta);
 		lega[izbran_delec][1] += rand_double(delta);
@@ -213,16 +232,15 @@ double MC_simulator(double lega[N][D], double* E_old, double* Wv, double* MC_bia
 		if (lega[izbran_delec][1]>L) lega[izbran_delec][1] -= L;
 		if (lega[izbran_delec][1]<0) lega[izbran_delec][1] += L;
 
-		E_new = energija_sistema(lega, Wv);
-
-		dE = E_new - *E_old; // * E_old
+		E_new_k = energija_delca(lega, izbran_delec);
+		dE = 2.0 * (E_new_k - E_old_k);
 
 		if(dE<0){
-			*E_old = E_new; // * E_old 
+			*E_old += dE;
 			MC += 1;
 		}else{
 			if(exp(-dE/T) > randd()){
-				*E_old = E_new; // * E_old 
+				*E_old += dE;
 				MC += 1;
 			}else{
 				lega[izbran_delec][0] = xi;
@@ -236,14 +254,21 @@ double MC_simulator(double lega[N][D], double* E_old, double* Wv, double* MC_bia
 
 		if(iteracija%N == 0){
 			printf("i  = %d\t <E>/N = %.2f\t bias = %.2f %%\t delta = %.3f\n",iteracija,*E_old,bias*100,delta);
+			if(iteracija>EIN){
+				gr(lega, histogram, ++n_configs, false);
+			}
 			//printf("MC bias = %f\n",bias);
 		}
 
+		
+		fprintf(pisi,"%d\t",iteracija);
+		fprintf(pisi,"%f\t",*E_old);
+		fprintf(pisi,"%f\t",bias);
+		fprintf(pisi,"%f\t",delta);
+		fprintf(pisi,"%d\n",rec);
+
 		if(iteracija > EIN){
-			fprintf(pisi,"%d\t",iteracija);
-			fprintf(pisi,"%f\t",*E_old);
-			fprintf(pisi,"%f\t",bias);
-			fprintf(pisi,"%f\n",delta);
+			rec = 1;
 		}
 		
 		*MC_bias = bias; // * MC_bias
@@ -251,7 +276,6 @@ double MC_simulator(double lega[N][D], double* E_old, double* Wv, double* MC_bia
 
 	fclose(pisi);
 	shrani_lege(lega);
-	gr(lega);
-
+	gr(lega, histogram, ++n_configs, true);
 	return *E_old; // * E_old 
 }
