@@ -1,5 +1,7 @@
 # Pregled
 
+![https://colab.research.google.com/drive/1PDSp-oJr8qp9eJqfTqo0cEXgrltYEZ-s?usp=sharing](colab)
+
 V tej mapi se nahajajo primeri `c/c++` kod, izdelane pri predmetu `Numerične metode v fiziki`. Metode zajemajo:
 
 ## Pregled metod
