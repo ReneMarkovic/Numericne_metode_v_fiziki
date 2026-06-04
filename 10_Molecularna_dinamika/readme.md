@@ -1,6 +1,6 @@
 # Molekularna dinamika (Molecular Dynamics)
 
-vir: ![colab](https://colab.research.google.com/drive/1PDSp-oJr8qp9eJqfTqo0cEXgrltYEZ-s?usp=sharing)
+vir: <a href="https://colab.research.google.com/drive/1PDSp-oJr8qp9eJqfTqo0cEXgrltYEZ-s?usp=sharing">link</a>
 
 Ta mapa vsebuje računalniško simulacijo klasičnega sistema delcev (npr. žlahtnega plina argona) z uporabo molekularne dinamike (MD) v treh dimenzijah. Simulacija temelji na numeričnem integriranju Newtonovih enačb gibanja in računanju parnih interakcij preko Lennard-Jonesovega potenciala. Podoben primerm smo reševali že pri vaji 09_Monte_Carlo, kjer smo uporabili naključna števila in **Metropolisov algoritem**.
 
