@@ -28,7 +28,11 @@ Da bi se izognili robnim efektom majhnega števila delcev in simulirali neskonč
 ## 3. Integracijski algoritem: Velocity Verlet
 
 Za posodabljanje koordinat $\vec{r}$ in hitrosti $\vec{v}$ delcev v časovnem koraku $\Delta t$ koda uporablja simplektični in energijsko stabilni Velocity Verlet algoritem:
-$$\vec{r}(t + \Delta t) = \vec{r}(t) + \vec{v}(t)\Delta t + \frac{1}{2}\vec{a}(t)\Delta t^2$$$$\vec{v}\left(t + \frac{\Delta t}{2}\right) = \vec{v}(t) + \frac{1}{2}\vec{a}(t)\Delta t$$
+
+
+$$\vec{r}(t + \Delta t) = \vec{r}(t) + \vec{v}(t)\Delta t + \frac{1}{2}\vec{a}(t)\Delta t^2$$
+
+$$\vec{v}\left(t + \frac{\Delta t}{2}\right) = \vec{v}(t) + \frac{1}{2}\vec{a}(t)\Delta t$$
 
 $$\vec{a}(t + \Delta t) = \frac{1}{m}\vec{F}(\vec{r}(t + \Delta t))$$
 
